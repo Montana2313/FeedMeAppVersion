@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Parse
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,7 +16,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        let myconfig = ParseClientConfiguration { (ParseMutuableClientConfigration) in
+            ParseMutuableClientConfigration.applicationId = "332932ae87b016300ce77883427116f37a907fc0"
+            ParseMutuableClientConfigration.clientKey = "747b6a7553f357ef99046fc99c47ed34584621be"
+            ParseMutuableClientConfigration.server = "http://18.219.17.4:80/parse"
+        }
+        rememberlogin()
+        
+        Parse.initialize(with: myconfig)
+        
+        let defacl = PFACL()
+        defacl.getPublicReadAccess = true
+        defacl.getPublicWriteAccess = true
+        PFACL.setDefault(defacl, withAccessForCurrentUser: true)
+        
+       
         return true
     }
 
@@ -39,6 +54,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    }
+    func rememberlogin()
+    {
+        let user : String? = UserDefaults.standard.string(forKey: "user")
+        if user != nil
+        {
+            let board : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let tabbarcontroller  = board.instantiateViewController(withIdentifier: "tabbar") as? UITabBarController
+            window?.rootViewController = tabbarcontroller
+            
+            
+        }
+        
     }
 
 
